@@ -1,4 +1,4 @@
-name: Limpieza Automatica de Mails
+name: Lumpiar Correos
 
 on:
   schedule:
@@ -20,12 +20,9 @@ jobs:
           python-version: '3.10'
 
       - name: Instalar dependencias
-        run: |
-          pip install python-dotenv
-          # Si tienes mas dependencias en requirements.txt, descomenta la siguiente linea:
-          # pip install -r requirements.txt
+        run: pip install python-dotenv
 
-      - name: Ejecutar script de filtrado
+      - name: Ejecutar app.py
         env:
           EMAIL_SERVIDOR: ${{ secrets.EMAIL_SERVIDOR }}
           EMAIL_USUARIO: ${{ secrets.EMAIL_USUARIO }}
