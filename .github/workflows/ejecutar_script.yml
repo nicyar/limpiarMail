@@ -31,4 +31,4 @@ jobs:
           EMAIL_USUARIO: ${{ secrets.EMAIL_USUARIO }}
           EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           EMAIL_PUERTO: 993
-        run: python nombre_de_tu_archivo.py
+        run: python app.py
