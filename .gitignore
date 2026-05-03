@@ -1,0 +1,22 @@
+# ===== VARIABLES DE ENTORNO (NUNCA SUBIR) =====
+.env
+.env.local
+.env.*.local
+
+# ===== PYTHON =====
+*.py[cod]
+*$py.class
+__pycache__/
+*.egg-info/
+venv/
+env/
+
+# ===== IDE =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== OTROS =====
+*.log
+.DS_Store
