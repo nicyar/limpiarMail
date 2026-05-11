@@ -64,7 +64,11 @@ cuit_blacklist = [
     "30710448031",  # Haciendo Camino Asociacion Civil
     "30699670231",  # OLAZABAL ENRIQUE Y OLAZABAL GUILLERMO SH
     "27060445899",  # MARTINENGO NELIDA ROSA
-    
+    "30717042812",  # SIGNA DESARROLLOS SA
+    "30711620253",  # CIC LOGISTICA SRL
+    "33503716319",  # DELPA SRL
+    "30708727519"  # GRAFICA OFFSET SRL
+
 ]
 
 def esta_en_lista_negra(cuit):
