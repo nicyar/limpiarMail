@@ -22,6 +22,9 @@ jobs:
       - name: Instalar dependencias
         run: pip install python-dotenv
 
+      - name: Crear blacklist.json desde secret
+        run: echo '${{ secrets.CUIT_BLACKLIST_JSON }}' > blacklist.json
+
       - name: Ejecutar app.py
         env:
           EMAIL_SERVIDOR: ${{ secrets.EMAIL_SERVIDOR }}

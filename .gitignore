@@ -1,9 +1,12 @@
-# ===== VARIABLES DE ENTORNO (NUNCA SUBIR) =====
+# ===== VARIABLES DE ENTORNO
 .env
 .env.local
 .env.*.local
 
-# ===== PYTHON =====
+# ===== DATOS SENSIBLES 
+blacklist.json
+
+# ===== PYTHON 
 *.py[cod]
 *$py.class
 __pycache__/
@@ -11,12 +14,12 @@ __pycache__/
 venv/
 env/
 
-# ===== IDE =====
+# ===== IDE 
 .vscode/
 .idea/
 *.swp
 *.swo
 
-# ===== OTROS =====
+# ===== OTROS 
 *.log
 .DS_Store

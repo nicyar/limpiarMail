@@ -1,33 +1,71 @@
-## 🛡️ Cómo agregar un CUIT a la lista negra (blacklist) desde GitHub
+# limpiarMail
 
-Seguí estos simples pasos para bloquear un nuevo CUIT directamente desde el repositorio.
+Script en Python que revisa automáticamente una casilla de correo, identifica notificaciones de pago provenientes de CUITs en una lista negra, y las elimina. Corre solo, sin intervención manual, tres veces por semana vía GitHub Actions.
 
-### 1️⃣ Entrar al archivo `app.py`
+## Qué resuelve
 
-- En la página principal de tu repositorio, hacé clic en el archivo `app.py`.
-- Arriba a la derecha del contenido del archivo, buscá el ícono del ✏️ lápiz que dice **"Edit this file"** y hace clic.
+Ciertos remitentes generan notificaciones repetidas de un asunto específico que no aportan valor y solo ensucian la bandeja de entrada. En vez de borrarlas a mano, el script se conecta por IMAP, filtra por asunto, extrae el CUIT del cuerpo del mail, y decide automáticamente si eliminarlo o marcarlo como leído.
 
-### 2️⃣ Editar la lista negra
+## Cómo funciona
 
-- Buscá la sección donde aparece:  
-  `cuit_blacklist = [`  
-- Agregá el nuevo CUIT respetando las comillas y la coma al final.
+1. Se conecta a la casilla vía `imaplib` (IMAP sobre SSL).
+2. Busca todos los correos no leídos.
+3. Filtra por el asunto exacto que interesa monitorear.
+4. Extrae el cuerpo en HTML del correo y lo limpia con regex para quedarse solo con el texto.
+5. Parsea el CUIT del texto.
+6. Si el CUIT está en la lista negra, elimina el correo. Si no, lo marca como leído sin borrarlo.
 
-### 3️⃣ Guardar los cambios (Commit)
+## Automatización
 
-- Hacé clic en el botón verde **"Commit changes..."** (arriba a la derecha).
-- En la ventana que aparece:
-  - En el primer cuadro (mensaje), poné algo corto como:  
-    `Agrego CUIT de [Nombre de la Empresa]`
-  - Asegurate de que esté seleccionada la opción  
-    ✅ **"Commit directly to the main branch"**
-- Hacé clic en el botón verde **"Commit changes"**.
+El workflow de GitHub Actions (`.github/workflows/limpiar-correos.yml`) corre el script automáticamente lunes, miércoles y viernes, usando **GitHub Secrets** para las credenciales de email — nunca quedan expuestas en el código ni en los logs de ejecución. También se puede disparar manualmente desde la pestaña "Actions" del repositorio (`workflow_dispatch`).
 
----
+## Stack
 
-🎉 ¡Listo! El nuevo CUIT ya está en la lista negra.
+- Python 3.10
+- `imaplib` / `email` (librería estándar) para el protocolo IMAP y el parseo de correos
+- `python-dotenv` para variables de entorno en desarrollo local
+- GitHub Actions para la ejecución programada
 
-#### 📝 Ejemplo:
+## Cómo correrlo localmente
 
-```python
-"30123456789",  # Nombre de la Empresa
+1. Instalar dependencias:
+   ```
+   pip install python-dotenv
+   ```
+
+2. Crear un archivo `.env` en la raíz (no se sube a git) con:
+   ```
+   EMAIL_SERVIDOR=imap.tuproveedor.com
+   EMAIL_PUERTO=993
+   EMAIL_USUARIO=tu-email@dominio.com
+   EMAIL_PASSWORD=tu-contraseña-o-app-password
+   ```
+
+3. Crear `blacklist.json` (tampoco se sube a git) a partir de la plantilla:
+   ```
+   cp blacklist.example.json blacklist.json
+   ```
+   y completar ahí los CUITs reales a bloquear, con este formato:
+   ```json
+   [
+     { "cuit": "20111111112", "nombre": "Empresa de Ejemplo SA" }
+   ]
+   ```
+
+4. Correr:
+   ```
+   python app.py
+   ```
+
+## Configurar la automatización en GitHub
+
+En **Settings → Secrets and variables → Actions** del repositorio, cargar:
+
+- `EMAIL_SERVIDOR`
+- `EMAIL_USUARIO`
+- `EMAIL_PASSWORD`
+- `CUIT_BLACKLIST_JSON` — el contenido completo de tu `blacklist.json`, pegado como un secret de tipo texto (el workflow lo escribe a un archivo en el momento de correr, así nunca queda en el repositorio)
+
+## Nota sobre privacidad
+
+Los CUITs y nombres reales bloqueados **no están en este repositorio** — viven en `blacklist.json`, que está en `.gitignore`, y en producción se inyectan vía GitHub Secrets. Solo `blacklist.example.json` (con datos ficticios) queda público, como referencia de formato.
