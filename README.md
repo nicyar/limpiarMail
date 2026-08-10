@@ -41,7 +41,7 @@ El workflow de GitHub Actions (`.github/workflows/limpiar-correos.yml`) corre el
    EMAIL_PASSWORD=tu-contraseña-o-app-password
    ```
 
-3. Crear `blacklist.json` (tampoco se sube a git) a partir de la plantilla:
+3. Crear `blacklist.json` (No subir a Github) a partir de la plantilla:
    ```
    cp blacklist.example.json blacklist.json
    ```
