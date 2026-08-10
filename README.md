@@ -69,3 +69,11 @@ En **Settings → Secrets and variables → Actions** del repositorio, cargar:
 ## Nota sobre privacidad
 
 Los CUITs y nombres reales bloqueados **no están en este repositorio** — viven en `blacklist.json`, que está en `.gitignore`, y en producción se inyectan vía GitHub Secrets. Solo `blacklist.example.json` (con datos ficticios) queda público, como referencia de formato.
+
+## Bugs
+
+Al corrrer el archivo manualmente, puede fallar en marcar los mails como no leidos
+
+<img width="600" height="313" alt="Image" src="https://github.com/user-attachments/assets/52ee4b7c-3609-4aae-b437-c6e0c0ded117" />
+
+
